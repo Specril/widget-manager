@@ -43,7 +43,11 @@ function WidgetList() {
       <div>
         {widgets.map((widget) => (
           <div key={widget.id}>
-            <WidgetDetails widget={widget} pageName={pageName}></WidgetDetails>
+            <WidgetDetails
+              widget={widget}
+              pageName={pageName}
+              onDelete={handleDelete}
+            ></WidgetDetails>
           </div>
         ))}
       </div>

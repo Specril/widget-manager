@@ -2,16 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const handleDelete = (widgetId, pageName) => {
-  axios
-    .delete(`http://127.0.0.1:5000/widget/${pageName}/${widgetId}`)
-    .then((response) => {
-      setWidgets(widgets.filter((widget) => widget.id !== widgetId));
-    })
-    .catch((error) => console.log(error));
-};
-
-const WidgetDetails = ({ widget, pageName }) => {
+const WidgetDetails = ({ widget, pageName, onDelete }) => {
   return (
     <>
       <h3>{widget.header}</h3>
@@ -22,7 +13,7 @@ const WidgetDetails = ({ widget, pageName }) => {
       <p>{widget.text}</p>
       <img src={widget.thumbnail} alt="Widget Thumbnail" />
       <br />
-      <button onClick={() => handleDelete(widget.id)}>Delete</button>
+      <button onClick={() => onDelete(widget.id)}>Delete</button>
       <Link to={`/edit/${pageName}/${widget.id}`}>
         <button>Edit</button>
       </Link>
