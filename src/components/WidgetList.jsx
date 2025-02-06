@@ -34,11 +34,10 @@ function WidgetList() {
 
   return (
     <div>
-      <h1>Widgets for {pageName} page</h1>
+      <h1>Widgets for {pageName}</h1>
       <select onChange={(e) => setPageName(e.target.value)} value={pageName}>
         <option value="homepage">Home</option>
         <option value="aboutpage">About</option>
-        <option value="contactpage">Contact</option>
       </select>
       <div>
         {widgets.map((widget) => (
