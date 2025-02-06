@@ -42,7 +42,7 @@ function WidgetList() {
       </select>
       <div>
         {widgets.map((widget) => (
-          <div key={widget.id}>
+          <div key={widget.id} className="card">
             <WidgetDetails
               widget={widget}
               pageName={pageName}

@@ -35,58 +35,62 @@ function AddWidget() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Header:
-        <input
-          type="text"
-          value={header}
-          onChange={(e) => setHeader(e.target.value)}
-        />
-      </label>
-      <label>
-        ID:
-        <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
-      </label>
-      <label>
-        Page Name:
-        <input
-          type="text"
-          value={pageName}
-          onChange={(e) => setPageName(e.target.value)}
-        />
-      </label>
-      <label>
-        Price:
-        <input
-          type="text"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
-      </label>
-      <label>
-        Show to Percentage:
-        <input
-          type="number"
-          value={showToPercentage}
-          onChange={(e) => setShowToPercentage(Number(e.target.value))}
-        />
-      </label>
-      <label>
-        Text:
-        <textarea value={text} onChange={(e) => setText(e.target.value)} />
-      </label>
-      <label>
-        Thumbnail:
-        <input
-          type="text"
-          value={thumbnail}
-          onChange={(e) => setThumbnail(e.target.value)}
-        />
-      </label>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Header:
+          <input
+            type="text"
+            value={header}
+            onChange={(e) => setHeader(e.target.value)}
+          />
+        </label>
+        <label>
+          ID:
+          <input
+            type="text"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+          />
+        </label>
+        <label>
+          Page Name:
+          <input
+            type="text"
+            value={pageName}
+            onChange={(e) => setPageName(e.target.value)}
+          />
+        </label>
+        <label>
+          Price:
+          <input
+            type="text"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </label>
+        <label>
+          Show to Percentage:
+          <input
+            type="number"
+            value={showToPercentage}
+            onChange={(e) => setShowToPercentage(Number(e.target.value))}
+          />
+        </label>
+        <label>
+          Text:
+          <textarea value={text} onChange={(e) => setText(e.target.value)} />
+        </label>
+        <label>
+          Thumbnail:
+          <input
+            type="text"
+            value={thumbnail}
+            onChange={(e) => setThumbnail(e.target.value)}
+          />
+        </label>
 
-      <button type="submit">Add Widget</button>
-    </form>
+        <button type="submit">Add Widget</button>
+      </form>
   );
 }
 
