@@ -1,16 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { usePercentageContext } from "../context/PercentageContext"; // Import global context
 
 function EditWidget() {
   const { pageName, widgetId } = useParams(); // Get pageName and widgetId from URL
-  const [widget, setWidget] = useState(null); // Store the widget data
+  const { pageToPercentage } = usePercentageContext(); // Get the global page percentages
+
+  const [widget, setWidget] = useState(null);
   const [header, setHeader] = useState("");
   const [id, setId] = useState("");
   const [price, setPrice] = useState("Free");
   const [showToPercentage, setShowToPercentage] = useState(0);
   const [text, setText] = useState("");
   const [thumbnail, setThumbnail] = useState("");
+  const [isValidUpdate, setIsValidUpdate] = useState(true); // Tracks if update is valid
 
   const navigate = useNavigate();
 
@@ -42,8 +46,24 @@ function EditWidget() {
       .catch((error) => console.error("Error fetching widgets:", error));
   }, [pageName, widgetId]); // Fetch widgets again if pageName or widgetId changes
 
+  // Validate the new percentage before allowing update
+  useEffect(() => {
+    if (!pageToPercentage[pageName] || !widget) return;
+
+    const currentTotal = pageToPercentage[pageName]; // Get current total for the page
+    const remainingPercentage = currentTotal - widget.showToPercentage; // Remove old widget's percentage
+    const newTotal = remainingPercentage + showToPercentage; // New total if updated
+
+    setIsValidUpdate(newTotal <= 100); // Disable update if over 100%
+  }, [showToPercentage, pageToPercentage, pageName, widget]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!isValidUpdate) {
+      alert("The total ShowToPercentage for this page cannot exceed 100%.");
+      return;
+    }
 
     const updatedWidget = {
       header,
@@ -81,14 +101,6 @@ function EditWidget() {
         <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
       </label>
       <label>
-        Page Name:
-        <input
-          type="text"
-          value={pageName}
-          onChange={(e) => setPageName(e.target.value)}
-        />
-      </label>
-      <label>
         Price:
         <input
           type="text"
@@ -104,6 +116,16 @@ function EditWidget() {
           onChange={(e) => setShowToPercentage(Number(e.target.value))}
         />
       </label>
+      <p>
+        Total Percentage After Update:{" "}
+        {pageToPercentage[pageName] -
+          widget.showToPercentage +
+          showToPercentage}
+        %
+      </p>
+      {!isValidUpdate && (
+        <p style={{ color: "red" }}>Total percentage cannot exceed 100%.</p>
+      )}
       <label>
         Text:
         <textarea value={text} onChange={(e) => setText(e.target.value)} />
@@ -117,7 +139,9 @@ function EditWidget() {
         />
       </label>
 
-      <button type="submit">Update Widget</button>
+      <button type="submit" disabled={!isValidUpdate}>
+        Update Widget
+      </button>
     </form>
   ) : (
     <p>Loading...</p>
