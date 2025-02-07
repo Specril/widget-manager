@@ -86,6 +86,18 @@ function EditWidget() {
       .catch((error) => console.log(error));
   };
 
+  const handlePercentageChange = (e) => {
+    const newValue = Number(e.target.value);
+
+    if (newValue < 0) {
+      setIsNegative(true);
+      return; // Do not update state if value is negative
+    } else {
+      setIsNegative(false);
+      setShowToPercentage(newValue);
+    }
+  };
+
   return widget ? (
     <form onSubmit={handleSubmit}>
       <label>
@@ -111,9 +123,10 @@ function EditWidget() {
       <label>
         Show to Percentage:
         <input
+          min="0"
           type="number"
           value={showToPercentage}
-          onChange={(e) => setShowToPercentage(Number(e.target.value))}
+          onChange={handlePercentageChange}
         />
       </label>
       <p>

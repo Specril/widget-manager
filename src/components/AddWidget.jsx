@@ -19,7 +19,9 @@ function AddWidget() {
   // Check if the new percentage is valid
   const handlePercentageChange = (e) => {
     const newPercentage = Number(e.target.value);
-    setShowToPercentage(newPercentage);
+    if (newPercentage >= 0) {
+      setShowToPercentage(newPercentage);
+    }
 
     // Get the current total for the selected page (default to 0 if not found)
     const currentTotal = pageToPercentage[pageName] || 0;
@@ -87,6 +89,7 @@ function AddWidget() {
       <label>
         Show to Percentage:
         <input
+          min="0"
           type="number"
           value={showToPercentage}
           onChange={handlePercentageChange}
