@@ -1,11 +1,11 @@
 /* ======== Shutterfly-Inspired Styling ======== */
 
 :root {
-  --primary-color: #ff6f00; /* Main Orange */
+  --primary-color: #333333; /* Main Orange */
   --secondary-color: #ffffff; /* White */
   --text-color: #333333; /* Dark Gray for better readability */
   --background-color: #f6f6f6; /* Light gray background */
-  --button-hover-color: #e65a00; /* Slightly darker orange */
+  --button-hover-color: #3333339c; /* Slightly darker orange */
   --border-radius: 10px; /* Smooth rounded corners */
   --shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadows */
 
@@ -49,23 +49,11 @@ h2 {
   font-size: 2.2em;
 }
 
-/* ======== Links ======== */
-a {
-  font-weight: 500;
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: color 0.3s ease-in-out;
-}
-
-a:hover {
-  color: var(--button-hover-color);
-}
-
 /* ======== Buttons ======== */
 button {
   border-radius: var(--border-radius);
   border: none;
-  padding: 10px 16px;
+  padding: 10px 10px 10px 10px;
   margin: 5px;
   font-size: 1em;
   font-weight: 600;
@@ -75,6 +63,10 @@ button {
   cursor: pointer;
   transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
   box-shadow: var(--shadow);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 button:hover {
@@ -114,7 +106,6 @@ select {
   padding: 10px;
   border-radius: var(--border-radius);
   border: 1px solid #cccccc;
-  margin-top: 5px;
   font-size: 1em;
   text-align: left;
 }
@@ -128,18 +119,39 @@ select:focus {
 
 /* ======== Cards (for widgets or UI blocks) ======== */
 .card {
+  display: flex;
+  flex-direction: column;
   background: var(--secondary-color);
-  padding: 20px;
+  padding: 10px;
   border-radius: var(--border-radius);
+  border-width: 1px;
+  border-color: #000000;
   box-shadow: var(--shadow);
   width: 100%;
   max-width: 500px;
-  margin: 20px auto;
+  margin: 10px auto;
 }
 
 .card h3 {
   color: var(--primary-color);
-  margin-bottom: 10px;
+  margin: 5px;
+}
+
+.card p {
+  margin: 5px;
+}
+
+.card img {
+  max-width: 50%;
+  height: auto;
+  border-radius: var(--border-radius);
+  align-self: center;
+  margin: 5px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* ======== Responsive Design ======== */
@@ -153,4 +165,37 @@ select:focus {
   button {
     max-width: 90%;
   }
+}
+
+/* ======== Page Selector + Adding Widgets ======== */
+.page-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+.page-selector select {
+  max-width: 70%;
+  height: fit-content;
+}
+.page-selector p {
+  font-weight: 600;
+  border: 2px solid; /* Adds a solid border */
+  min-width: 10%;
+  border-radius: 5px; /* Optional: rounds the corners */
+  height: auto;
+  margin: 0;
+}
+.page-selector button {
+  display: flex;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+}
+.page-selector button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
 }
