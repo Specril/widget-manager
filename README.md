@@ -31,4 +31,3 @@ The **Widget Manager** allows users to:
 
 ### 🔹 **Responsive Design**
 - **Mobile, Tablet, and Desktop-friendly UI**.
-- Uses **flexbox and grid layout** for adaptive design.
