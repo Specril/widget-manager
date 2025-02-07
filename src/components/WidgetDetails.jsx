@@ -5,14 +5,14 @@ import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 
-const WidgetDetails = ({ widget, pageName, onDelete }) => {
+const WidgetDetails = ({ widget, onDelete }) => {
   return (
     <>
       <div className="buttons">
         <button onClick={() => onDelete(widget.id)}>
           <FaTrashAlt />
         </button>
-        <Link to={`/edit/${pageName}/${widget.id}`}>
+        <Link to={`/edit/${widget.page_name}/${widget.id}`}>
           <button>
             <FiEdit style={{ scale: 1.2 }} />
           </button>

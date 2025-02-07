@@ -54,7 +54,7 @@ function WidgetList() {
   }, []); // Runs only once when the component mounts
 
   const [widgets, setWidgets] = useState([]);
-  const [pageName, setPageName] = useState("homepage"); // Default page
+  const [pageName, setPageName] = useState("All"); // Default page
   const [totalShowToPercentage, setTotalShowToPercentage] = useState(0);
   const [percentageColor, setPercentageColor] = useState("black");
 
@@ -98,20 +98,18 @@ function WidgetList() {
       .catch((error) => console.log(error));
   };
 
-  function sumShowToPercentage(widgets) {
-    return widgets.reduce(
-      (total, widget) => total + (widget.showToPercentage || 0),
-      0
-    );
-  }
-
   useEffect(() => {
+    function sumShowToPercentage(widgets) {
+      return widgets.reduce(
+        (total, widget) => total + (widget.showToPercentage || 0),
+        0
+      );
+    }
     setTotalShowToPercentage(sumShowToPercentage(widgets));
-    setPercentageColor(totalShowToPercentage > 100 ? "red" : "green");
   }, [widgets]);
 
   return (
-    <div>
+    <>
       <h1>Widgets for {pageName}</h1>
       <div className="page-selector">
         <select onChange={(e) => setPageName(e.target.value)} value={pageName}>
@@ -129,24 +127,23 @@ function WidgetList() {
           )}
         </select>
         <Link to="/add">
-          <button disabled={totalShowToPercentage >= 100}>{<FaPlus />}</button>
+          <button disabled={pageName !== "All" && totalShowToPercentage >= 100}>
+            {<FaPlus />}
+          </button>
         </Link>
-        <p style={{ borderColor: percentageColor, color: percentageColor }}>
-          {totalShowToPercentage}%
-        </p>
+        {pageName !== "All" && <p>{totalShowToPercentage}%</p>}
       </div>
       <div>
         {widgets.map((widget) => (
           <div key={widget.id} className="card">
             <WidgetDetails
               widget={widget}
-              pageName={pageName}
               onDelete={handleDelete}
             ></WidgetDetails>
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }
 
