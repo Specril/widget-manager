@@ -126,6 +126,7 @@ function WidgetList() {
           setPageNames((prevPageNames) =>
             prevPageNames.filter((name) => name !== widgetToDelete.page_name)
           );
+          setPageName("All");
         }
       })
       .catch((error) => console.error("Error deleting widget:", error));
