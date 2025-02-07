@@ -98,6 +98,33 @@ function WidgetList() {
     }));
   }, [widgets, pageName, setPageToPercentage]);
 
+  const handleDelete = (widgetToDelete) => {
+    axios
+      .delete(
+        `http://127.0.0.1:5000/widget/${widgetToDelete.page_name}/${widgetToDelete.id}`
+      )
+      .then(() => {
+        // Remove widget from local state
+        const updatedWidgets = widgets.filter(
+          (widget) => widget.id !== widgetToDelete.id
+        );
+        setWidgets(updatedWidgets);
+
+        // Recalculate total percentage after deletion
+        const newTotalPercentage = updatedWidgets.reduce(
+          (total, widget) => total + (widget.showToPercentage || 0),
+          0
+        );
+
+        // Update the global percentage context
+        setPageToPercentage((prev) => ({
+          ...prev,
+          [pageName]: newTotalPercentage,
+        }));
+      })
+      .catch((error) => console.error("Error deleting widget:", error));
+  };
+
   return (
     <>
       <h1>Widgets for {pageName}</h1>
@@ -123,7 +150,7 @@ function WidgetList() {
           <div key={widget.id} className="card">
             <WidgetDetails
               widget={widget}
-              onDelete={() => handleDelete(widget.id)}
+              onDelete={() => handleDelete(widget)}
             />
           </div>
         ))}

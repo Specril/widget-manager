@@ -9,7 +9,7 @@ const WidgetDetails = ({ widget, onDelete }) => {
   return (
     <>
       <div className="buttons">
-        <button onClick={() => onDelete(widget.id)}>
+        <button onClick={() => onDelete(widget)}>
           <FaTrashAlt />
         </button>
         <Link to={`/edit/${widget.page_name}/${widget.id}`}>
