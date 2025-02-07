@@ -15,6 +15,7 @@ function EditWidget() {
   const [text, setText] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [isValidUpdate, setIsValidUpdate] = useState(true); // Tracks if update is valid
+  const [isValidAddition, setIsValidAddition] = useState(true); // Checks if addition is allowed
 
   const navigate = useNavigate();
 
@@ -50,12 +51,28 @@ function EditWidget() {
   useEffect(() => {
     if (!pageToPercentage[pageName] || !widget) return;
 
-    const currentTotal = pageToPercentage[pageName]; // Get current total for the page
-    const remainingPercentage = currentTotal - widget.showToPercentage; // Remove old widget's percentage
-    const newTotal = remainingPercentage + showToPercentage; // New total if updated
+    const currentTotal = pageToPercentage[pageName] || 0; // Get current total for the page
+    const remainingPercentage = currentTotal - widget.showToPercentage; // Subtract the current widget's percentage
+    const newTotal = remainingPercentage + showToPercentage; // Add new value
 
     setIsValidUpdate(newTotal <= 100); // Disable update if over 100%
   }, [showToPercentage, pageToPercentage, pageName, widget]);
+
+  // Check if the new percentage is valid
+  const handlePercentageChange = (e) => {
+    const newPercentage = Number(e.target.value);
+
+    if (newPercentage >= 0) {
+      setShowToPercentage(newPercentage);
+    }
+
+    // Get the current total for the selected page (default to 0 if not found)
+    const currentTotal = pageToPercentage[pageName] || 0;
+    const newTotal =
+      currentTotal - (widget?.showToPercentage || 0) + newPercentage; // Subtract old, add new
+
+    setIsValidAddition(newTotal <= 100); // Disable submission if over 100%
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -86,18 +103,6 @@ function EditWidget() {
       .catch((error) => console.log(error));
   };
 
-  const handlePercentageChange = (e) => {
-    const newValue = Number(e.target.value);
-
-    if (newValue < 0) {
-      setIsNegative(true);
-      return; // Do not update state if value is negative
-    } else {
-      setIsNegative(false);
-      setShowToPercentage(newValue);
-    }
-  };
-
   return widget ? (
     <form onSubmit={handleSubmit}>
       <label>
@@ -123,20 +128,21 @@ function EditWidget() {
       <label>
         Show to Percentage:
         <input
-          min="0"
           type="number"
+          min="0"
           value={showToPercentage}
           onChange={handlePercentageChange}
         />
       </label>
       <p>
-        Total Percentage After Update:{" "}
-        {pageToPercentage[pageName] -
-          widget.showToPercentage +
+        Current Page Total: {pageToPercentage[pageName] || 0}% <br />
+        New Total After Addition:{" "}
+        {(pageToPercentage[pageName] || 0) -
+          (widget?.showToPercentage || 0) +
           showToPercentage}
         %
       </p>
-      {!isValidUpdate && (
+      {!isValidAddition && (
         <p style={{ color: "red" }}>Total percentage cannot exceed 100%.</p>
       )}
       <label>
