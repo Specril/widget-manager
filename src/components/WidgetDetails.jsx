@@ -19,11 +19,11 @@ const WidgetDetails = ({ widget, onDelete }) => {
         </Link>
       </div>
       <h3>{widget.header}</h3>
-      <p>{widget.id}</p>
-      <p>{widget.page_name}</p>
-      <p>{widget.price}</p>
-      <p>{widget.showToPercentage}%</p>
       <p>{widget.text}</p>
+      <p>ID: {widget.id}</p>
+      <p>Page: {widget.page_name}</p>
+      <p>Price: {widget.price}</p>
+      <p>Percent: {widget.showToPercentage}%</p>
       <img src={widget.thumbnail} alt="Widget Thumbnail" />
       <br />
     </>

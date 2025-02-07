@@ -121,6 +121,12 @@ function WidgetList() {
           ...prev,
           [pageName]: newTotalPercentage,
         }));
+
+        if (updatedWidgets.length === 0) {
+          setPageNames((prevPageNames) =>
+            prevPageNames.filter((name) => name !== widgetToDelete.page_name)
+          );
+        }
       })
       .catch((error) => console.error("Error deleting widget:", error));
   };

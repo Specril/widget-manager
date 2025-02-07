@@ -141,7 +141,12 @@ function EditWidget() {
       )}
       <label>
         Text:
-        <textarea value={text} onChange={(e) => setText(e.target.value)} />
+        <textarea
+          draggable={false}
+          style={{ resize: "none" }}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
       </label>
       <label>
         Thumbnail:

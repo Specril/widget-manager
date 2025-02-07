@@ -139,13 +139,12 @@ select:focus {
 }
 
 .card p {
-  margin: 5px;
+  margin: 1px;
 }
 
 .card img {
   max-width: 50%;
   height: auto;
-  border-radius: var(--border-radius);
   align-self: center;
   margin: 5px;
 }
@@ -164,6 +163,10 @@ select:focus {
   input,
   select,
   button {
+    max-width: 90%;
+  }
+
+  .card {
     max-width: 90%;
   }
 }
