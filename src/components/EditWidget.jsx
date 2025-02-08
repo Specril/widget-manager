@@ -108,6 +108,7 @@ function EditWidget() {
       <label>
         Header:
         <input
+          required
           type="text"
           value={header}
           onChange={(e) => setHeader(e.target.value)}
@@ -115,11 +116,17 @@ function EditWidget() {
       </label>
       <label>
         ID:
-        <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
+        <input
+          required
+          type="text"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+        />
       </label>
       <label>
         Price:
         <input
+          required
           type="text"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
@@ -128,6 +135,7 @@ function EditWidget() {
       <label>
         Show to Percentage:
         <input
+          required
           type="number"
           min="0"
           value={showToPercentage}
@@ -148,6 +156,7 @@ function EditWidget() {
       <label>
         Text:
         <textarea
+          required
           draggable={false}
           style={{ resize: "none" }}
           value={text}
@@ -157,6 +166,7 @@ function EditWidget() {
       <label>
         Thumbnail:
         <input
+          required
           type="text"
           value={thumbnail}
           onChange={(e) => setThumbnail(e.target.value)}

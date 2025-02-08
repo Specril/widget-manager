@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
+import { FaTrashAlt } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 
 const WidgetDetails = ({ widget, onDelete }) => {

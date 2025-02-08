@@ -122,11 +122,17 @@ function WidgetList() {
           [pageName]: newTotalPercentage,
         }));
 
-        if (updatedWidgets.length === 0) {
+        // Remove page name if no widgets are left
+        const hasWidgetsRemaining = updatedWidgets.some(
+          (widget) => widget.page_name === widgetToDelete.page_name
+        );
+
+        // If no widgets remain for this page, remove it from `pageNames`
+        if (!hasWidgetsRemaining) {
           setPageNames((prevPageNames) =>
             prevPageNames.filter((name) => name !== widgetToDelete.page_name)
           );
-          setPageName("All");
+          setPageName("All"); // Reset to 'All' if the page was removed
         }
       })
       .catch((error) => console.error("Error deleting widget:", error));

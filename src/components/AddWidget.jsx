@@ -61,6 +61,7 @@ function AddWidget() {
       <label>
         Header:
         <input
+          required
           type="text"
           value={header}
           onChange={(e) => setHeader(e.target.value)}
@@ -68,11 +69,17 @@ function AddWidget() {
       </label>
       <label>
         ID:
-        <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
+        <input
+          required
+          type="text"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+        />
       </label>
       <label>
         Page Name:
         <input
+          required
           type="text"
           value={pageName}
           onChange={(e) => setPageName(e.target.value)}
@@ -81,6 +88,7 @@ function AddWidget() {
       <label>
         Price:
         <input
+          required
           type="text"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
@@ -89,6 +97,7 @@ function AddWidget() {
       <label>
         Show to Percentage:
         <input
+          required
           min="0"
           type="number"
           value={showToPercentage}
@@ -105,11 +114,16 @@ function AddWidget() {
       )}
       <label>
         Text:
-        <textarea value={text} onChange={(e) => setText(e.target.value)} />
+        <textarea
+          required
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
       </label>
       <label>
         Thumbnail:
         <input
+          required
           type="text"
           value={thumbnail}
           onChange={(e) => setThumbnail(e.target.value)}
