@@ -33,7 +33,7 @@ function AddWidget() {
     setId(newId);
 
     if (allWidgetIds.has(newId)) {
-      setIdError("This ID is already taken. Please choose a different one.");
+      setIdError("This ID is already taken.");
     } else {
       setIdError("");
     }
@@ -68,7 +68,7 @@ function AddWidget() {
     e.preventDefault();
 
     if (!isValidAddition) {
-      alert("The total ShowToPercentage for this page cannot exceed 100%.");
+      alert("The total percentage for this page cannot exceed 100%.");
       return;
     }
 
