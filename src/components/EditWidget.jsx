@@ -107,7 +107,7 @@ function EditWidget() {
     if (success) navigate(`/`);
   };
 
-  return widget ? (
+  return (
     <form onSubmit={handleSubmit}>
       <label>
         Header:
@@ -187,8 +187,6 @@ function EditWidget() {
         Update Widget
       </button>
     </form>
-  ) : (
-    <p>Loading...</p>
   );
 }
 
