@@ -32,6 +32,14 @@ body {
   background-color: var(--background-color);
 }
 
+p {
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden; /* Hides overflow */
+  text-overflow: ellipsis; /* Adds "..." at the edge */
+  max-width: 90vw; /* Set your desired width */
+  display: block; /* Ensures it applies properly */
+}
+
 /* ======== Headings ======== */
 h1,
 h2,
@@ -39,6 +47,11 @@ h3 {
   font-weight: 700;
   color: var(--primary-color);
   text-align: center;
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden; /* Hides overflow */
+  text-overflow: ellipsis; /* Adds "..." at the edge */
+  max-width: 90vw; /* Set your desired width */
+  display: block; /* Ensures it applies properly */
 }
 
 h1 {
