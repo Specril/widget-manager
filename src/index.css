@@ -226,6 +226,12 @@ select option {
   .scrollable-box {
     max-width: 300px;
   }
+
+  .page-selector {
+    width: 90%;
+    justify-self: center;
+    justify-content: space-between;
+  }
 }
 
 /* ======== Page Selector + Adding Widgets ======== */
