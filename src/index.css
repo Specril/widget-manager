@@ -203,6 +203,7 @@ select option {
 .text-p:hover {
   background-color: (var(--button-hover-color));
   scale: 1.05;
+  cursor: pointer;
 }
 
 /* ======== Responsive Design ======== */
