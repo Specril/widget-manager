@@ -96,6 +96,7 @@ function AddWidget() {
       <label>
         Header:
         <input
+          name="header"
           required
           type="text"
           value={header}
@@ -104,12 +105,19 @@ function AddWidget() {
       </label>
       <label>
         ID:
-        <input required type="text" value={id} onChange={handleIdChange} />
+        <input
+          name="ID"
+          required
+          type="text"
+          value={id}
+          onChange={handleIdChange}
+        />
       </label>
       {idError && <p style={{ color: "red" }}>{idError}</p>}
       <label>
         Page Name:
         <input
+          name="pageName"
           required
           type="text"
           value={pageName}
@@ -119,6 +127,7 @@ function AddWidget() {
       <label>
         Price:
         <input
+          name="price"
           required
           type="text"
           value={price}
@@ -128,6 +137,7 @@ function AddWidget() {
       <label>
         Show to Percentage:
         <input
+          name="showToPercentage"
           required
           min="0"
           max="100"
@@ -147,6 +157,7 @@ function AddWidget() {
       <label>
         Text:
         <textarea
+          name="text"
           required
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -155,6 +166,7 @@ function AddWidget() {
       <label>
         Thumbnail:
         <input
+          name="thumbnail"
           required
           type="text"
           value={thumbnail}
@@ -162,7 +174,11 @@ function AddWidget() {
         />
       </label>
 
-      <button type="submit" disabled={!isValidAddition || idError}>
+      <button
+        name="add_button"
+        type="submit"
+        disabled={!isValidAddition || idError}
+      >
         Add Widget
       </button>
     </form>

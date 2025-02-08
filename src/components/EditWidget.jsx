@@ -112,6 +112,7 @@ function EditWidget() {
       <label>
         Header:
         <input
+          name="header"
           required
           type="text"
           value={header}
@@ -120,12 +121,19 @@ function EditWidget() {
       </label>
       <label>
         ID:
-        <input required type="text" value={id} onChange={handleIdChange} />
+        <input
+          name="ID"
+          required
+          type="text"
+          value={id}
+          onChange={handleIdChange}
+        />
       </label>
       {idError && <p style={{ color: "red" }}>{idError}</p>}
       <label>
         Page Name:
         <input
+          name="pageName"
           required
           type="text"
           value={currentPageName}
@@ -135,6 +143,7 @@ function EditWidget() {
       <label>
         Price:
         <input
+          name="price"
           required
           type="text"
           value={price}
@@ -144,6 +153,7 @@ function EditWidget() {
       <label>
         Show to Percentage:
         <input
+          name="showToPercentage"
           required
           min="0"
           max="100"
@@ -166,6 +176,7 @@ function EditWidget() {
       <label>
         Text:
         <textarea
+          name="text"
           required
           draggable={false}
           style={{ resize: "none" }}
@@ -176,6 +187,7 @@ function EditWidget() {
       <label>
         Thumbnail:
         <input
+          name="thumbnail"
           required
           type="text"
           value={thumbnail}
@@ -183,7 +195,11 @@ function EditWidget() {
         />
       </label>
 
-      <button type="submit" disabled={!isValidAddition || idError}>
+      <button
+        name="update_button"
+        type="submit"
+        disabled={!isValidAddition || idError}
+      >
         Update Widget
       </button>
     </form>
