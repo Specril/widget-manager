@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { usePercentageContext } from "../context/PercentageContext";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { fetchAllWidgets, fetchWidgetsByPage, deleteWidget } from "../api/api";
 import WidgetDetails from "./WidgetDetails";
 import { FaPlus } from "react-icons/fa";
 
@@ -16,71 +16,46 @@ function WidgetList() {
 
   // Fetch all widgets & update context
   useEffect(() => {
-    const fetchWidgets = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:5000/widgets");
-        const widgetsData = response.data;
+    const loadWidgets = async () => {
+      const widgetsData = await fetchAllWidgets();
 
-        if (!widgetsData || typeof widgetsData !== "object") {
-          console.error("Invalid API response:", widgetsData);
-          return;
-        }
+      if (Object.keys(widgetsData).length === 0) return; // No data
 
-        const pageMap = {};
+      const pageMap = {};
 
-        Object.entries(widgetsData).forEach(([name, value]) => {
-          const widgetsArray = Array.isArray(value) ? value : [value];
+      Object.entries(widgetsData).forEach(([name, value]) => {
+        const widgetsArray = Array.isArray(value) ? value : [value];
+        const totalPercentage = widgetsArray.reduce(
+          (sum, widget) => sum + (widget.showToPercentage || 0),
+          0
+        );
 
-          const totalPercentage = widgetsArray.reduce(
-            (sum, widget) => sum + (widget.showToPercentage || 0),
-            0
-          );
+        pageMap[name] = totalPercentage;
+      });
 
-          pageMap[name] = totalPercentage;
-        });
-
-        setPageNames(Object.keys(pageMap));
-        setPageToPercentage(pageMap); //  Update context globally
-      } catch (error) {
-        console.error("Error fetching widgets:", error);
-      }
+      setPageNames(Object.keys(pageMap));
+      setPageToPercentage(pageMap); // Update context globally
     };
 
-    fetchWidgets();
-  }, [setPageToPercentage]); //  Ensures context is always updated
+    loadWidgets();
+  }, [setPageToPercentage]);
 
   // Fetch widgets for the selected page
   useEffect(() => {
-    const fetchPageWidgets = async () => {
+    const loadPageWidgets = async () => {
+      const widgetsData = await fetchWidgetsByPage(pageName);
       if (pageName === "All") {
-        axios.get("http://127.0.0.1:5000/widgets").then((response) => {
-          const widgetsData = response.data;
-
-          if (!widgetsData || typeof widgetsData !== "object") {
-            console.error("Invalid API response:", widgetsData);
-            return;
-          }
-
-          const allWidgets = Object.values(widgetsData)
-            .flat()
-            .filter((item) => typeof item === "object");
-
-          setWidgets(allWidgets);
-        });
+        const allWidgets = Object.values(widgetsData)
+          .flat()
+          .filter((item) => typeof item === "object");
+        setWidgets(allWidgets);
       } else {
-        axios
-          .get(`http://127.0.0.1:5000/widget/${pageName}`)
-          .then((response) => {
-            setWidgets(
-              Array.isArray(response.data) ? response.data : [response.data]
-            );
-          })
-          .catch((error) => console.error(error));
+        setWidgets(widgetsData);
       }
     };
 
-    fetchPageWidgets();
-  }, [pageName]); //  Runs when page changes
+    loadPageWidgets();
+  }, [pageName]);
 
   // Update `totalShowToPercentage` whenever `widgets` change
   useEffect(() => {
@@ -98,44 +73,41 @@ function WidgetList() {
     }));
   }, [widgets, pageName, setPageToPercentage]);
 
-  const handleDelete = (widgetToDelete) => {
-    axios
-      .delete(
-        `http://127.0.0.1:5000/widget/${widgetToDelete.page_name}/${widgetToDelete.id}`
-      )
-      .then(() => {
-        // Remove widget from local state
-        const updatedWidgets = widgets.filter(
-          (widget) => widget.id !== widgetToDelete.id
-        );
-        setWidgets(updatedWidgets);
+  // Handle widget deletion
+  const handleDelete = async (widgetToDelete) => {
+    const success = await deleteWidget(widgetToDelete);
+    if (!success) return;
 
-        // Recalculate total percentage after deletion
-        const newTotalPercentage = updatedWidgets.reduce(
-          (total, widget) => total + (widget.showToPercentage || 0),
-          0
-        );
+    // Remove widget from local state
+    const updatedWidgets = widgets.filter(
+      (widget) => widget.id !== widgetToDelete.id
+    );
+    setWidgets(updatedWidgets);
 
-        // Update the global percentage context
-        setPageToPercentage((prev) => ({
-          ...prev,
-          [pageName]: newTotalPercentage,
-        }));
+    // Recalculate total percentage after deletion
+    const newTotalPercentage = updatedWidgets.reduce(
+      (total, widget) => total + (widget.showToPercentage || 0),
+      0
+    );
 
-        // Remove page name if no widgets are left
-        const hasWidgetsRemaining = updatedWidgets.some(
-          (widget) => widget.page_name === widgetToDelete.page_name
-        );
+    // Update the global percentage context
+    setPageToPercentage((prev) => ({
+      ...prev,
+      [pageName]: newTotalPercentage,
+    }));
 
-        // If no widgets remain for this page, remove it from `pageNames`
-        if (!hasWidgetsRemaining) {
-          setPageNames((prevPageNames) =>
-            prevPageNames.filter((name) => name !== widgetToDelete.page_name)
-          );
-          setPageName("All"); // Reset to 'All' if the page was removed
-        }
-      })
-      .catch((error) => console.error("Error deleting widget:", error));
+    // Check if any widgets remain for this page
+    const hasWidgetsRemaining = updatedWidgets.some(
+      (widget) => widget.page_name === widgetToDelete.page_name
+    );
+
+    // Remove page name if no widgets are left
+    if (!hasWidgetsRemaining) {
+      setPageNames((prevPageNames) =>
+        prevPageNames.filter((name) => name !== widgetToDelete.page_name)
+      );
+      setPageName("All"); // Reset to 'All' if the page was removed
+    }
   };
 
   return (
