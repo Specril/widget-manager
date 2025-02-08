@@ -1,106 +1,110 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import { usePercentageContext } from "../context/PercentageContext"; // Import global context
+import { usePercentageContext } from "../context/PercentageContext";
+import { fetchWidgetById, fetchAllWidgetIds, updateWidget } from "../api/api";
 
 function EditWidget() {
-  const { pageName, widgetId } = useParams(); // Get pageName and widgetId from URL
-  const { pageToPercentage } = usePercentageContext(); // Get the global page percentages
+  const { pageName, widgetId } = useParams();
+  const { pageToPercentage } = usePercentageContext();
 
   const [widget, setWidget] = useState(null);
   const [header, setHeader] = useState("");
   const [id, setId] = useState("");
+  const [originalId, setOriginalId] = useState(""); // Store the original ID
   const [price, setPrice] = useState("Free");
   const [showToPercentage, setShowToPercentage] = useState(0);
   const [text, setText] = useState("");
   const [thumbnail, setThumbnail] = useState("");
-  const [isValidUpdate, setIsValidUpdate] = useState(true); // Tracks if update is valid
-  const [isValidAddition, setIsValidAddition] = useState(true); // Checks if addition is allowed
+  const [currentPageName, setCurrentPageName] = useState(pageName);
+  const [isValidAddition, setIsValidAddition] = useState(true);
+  const [allWidgetIds, setAllWidgetIds] = useState(new Set());
+  const [idError, setIdError] = useState("");
 
   const navigate = useNavigate();
 
-  // Fetch all widgets for the given page
+  // Load widget data
   useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:5000/widget/${pageName}`)
-      .then((response) => {
-        let widgets = response.data;
+    const loadWidget = async () => {
+      const widgetToEdit = await fetchWidgetById(pageName, widgetId);
+      if (widgetToEdit) {
+        setWidget(widgetToEdit);
+        setHeader(widgetToEdit.header);
+        setId(widgetToEdit.id);
+        setOriginalId(widgetToEdit.id);
+        setPrice(widgetToEdit.price);
+        setShowToPercentage(widgetToEdit.showToPercentage);
+        setText(widgetToEdit.text);
+        setThumbnail(widgetToEdit.thumbnail);
+        setCurrentPageName(widgetToEdit.page_name);
+      }
+    };
 
-        // Ensure `widgets` is always an array
-        if (!Array.isArray(widgets)) {
-          widgets = [widgets]; // Wrap single object in an array
-        }
+    const loadAllIds = async () => {
+      setAllWidgetIds(await fetchAllWidgetIds());
+    };
 
-        // Find the widget to edit
-        const widgetToEdit = widgets.find((widget) => widget.id === widgetId);
+    loadWidget();
+    loadAllIds();
+  }, [pageName, widgetId]);
 
-        if (widgetToEdit) {
-          setWidget(widgetToEdit);
-          setHeader(widgetToEdit.header);
-          setId(widgetToEdit.id);
-          setPrice(widgetToEdit.price);
-          setShowToPercentage(widgetToEdit.showToPercentage);
-          setText(widgetToEdit.text);
-          setThumbnail(widgetToEdit.thumbnail);
-        }
-      })
-      .catch((error) => console.error("Error fetching widgets:", error));
-  }, [pageName, widgetId]); // Fetch widgets again if pageName or widgetId changes
+  // Check if ID is unique
+  const handleIdChange = (e) => {
+    const newId = e.target.value.trim();
+    setId(newId);
 
-  // Validate the new percentage before allowing update
-  useEffect(() => {
-    if (!pageToPercentage[pageName] || !widget) return;
+    if (newId !== originalId && allWidgetIds.has(newId)) {
+      setIdError("This ID is already taken. Please choose a different one.");
+    } else {
+      setIdError("");
+    }
+  };
 
-    const currentTotal = pageToPercentage[pageName] || 0; // Get current total for the page
-    const remainingPercentage = currentTotal - widget.showToPercentage; // Subtract the current widget's percentage
-    const newTotal = remainingPercentage + showToPercentage; // Add new value
-
-    setIsValidUpdate(newTotal <= 100); // Disable update if over 100%
-  }, [showToPercentage, pageToPercentage, pageName, widget]);
-
-  // Check if the new percentage is valid
+  // Handle showToPercentage change (Now Correctly Subtracts Old Value)
   const handlePercentageChange = (e) => {
     const newPercentage = Number(e.target.value);
-
     if (newPercentage >= 0) {
       setShowToPercentage(newPercentage);
     }
 
     // Get the current total for the selected page (default to 0 if not found)
-    const currentTotal = pageToPercentage[pageName] || 0;
+    const currentTotal = pageToPercentage[currentPageName] || 0;
     const newTotal =
       currentTotal - (widget?.showToPercentage || 0) + newPercentage; // Subtract old, add new
 
     setIsValidAddition(newTotal <= 100); // Disable submission if over 100%
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isValidUpdate) {
+    if (!isValidAddition) {
       alert("The total ShowToPercentage for this page cannot exceed 100%.");
+      return;
+    }
+
+    if (idError) {
+      alert("Please choose a unique ID before submitting.");
       return;
     }
 
     const updatedWidget = {
       header,
       id,
-      page_name: pageName,
+      page_name: currentPageName,
       price,
       showToPercentage,
       text,
       thumbnail,
     };
 
-    axios
-      .put(
-        `http://127.0.0.1:5000/widget/${pageName}/${widgetId}`,
-        updatedWidget
-      )
-      .then(() => {
-        navigate(`/`);
-      })
-      .catch((error) => console.log(error));
+    const success = await updateWidget(
+      pageName,
+      currentPageName,
+      widgetId,
+      updatedWidget
+    );
+    if (success) navigate(`/`);
   };
 
   return widget ? (
@@ -116,11 +120,16 @@ function EditWidget() {
       </label>
       <label>
         ID:
+        <input required type="text" value={id} onChange={handleIdChange} />
+      </label>
+      {idError && <p style={{ color: "red" }}>{idError}</p>}
+      <label>
+        Page Name:
         <input
           required
           type="text"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
+          value={currentPageName}
+          onChange={(e) => setCurrentPageName(e.target.value)}
         />
       </label>
       <label>
@@ -136,16 +145,16 @@ function EditWidget() {
         Show to Percentage:
         <input
           required
-          type="number"
           min="0"
+          type="number"
           value={showToPercentage}
           onChange={handlePercentageChange}
         />
       </label>
       <p>
-        Current Page Total: {pageToPercentage[pageName] || 0}% <br />
+        Current Page Total: {pageToPercentage[currentPageName] || 0}% <br />
         New Total After Addition:{" "}
-        {(pageToPercentage[pageName] || 0) -
+        {(pageToPercentage[currentPageName] || 0) -
           (widget?.showToPercentage || 0) +
           showToPercentage}
         %
@@ -173,7 +182,7 @@ function EditWidget() {
         />
       </label>
 
-      <button type="submit" disabled={!isValidUpdate}>
+      <button type="submit" disabled={!isValidAddition || idError}>
         Update Widget
       </button>
     </form>

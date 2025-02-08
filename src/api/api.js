@@ -42,3 +42,59 @@ export const deleteWidget = async (widgetToDelete) => {
     return false;
   }
 };
+
+/* ========== EditWidget ========== */
+
+// Fetch a specific widget by ID
+export const fetchWidgetById = async (pageName, widgetId) => {
+  try {
+    const widgets = await fetchWidgetsByPage(pageName);
+    return widgets.find((widget) => widget.id === widgetId) || null;
+  } catch (error) {
+    console.error(`Error fetching widget ${widgetId} on ${pageName}:`, error);
+    return null;
+  }
+};
+
+// Fetch all widget IDs to check for uniqueness
+export const fetchAllWidgetIds = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/widgets`);
+    const widgetsData = response.data || {};
+
+    const allIds = Object.values(widgetsData)
+      .flat()
+      .map((widget) => widget.id);
+
+    return new Set(allIds); // Return a Set for quick lookup
+  } catch (error) {
+    console.error("Error fetching widget IDs:", error);
+    return new Set();
+  }
+};
+
+// Update a widget
+export const updateWidget = async (
+  oldPage,
+  newPage,
+  widgetId,
+  updatedWidget
+) => {
+  try {
+    // If the page has changed, delete from the old page and add to the new one
+    if (oldPage !== newPage) {
+      await axios.delete(`${API_BASE_URL}/widget/${oldPage}/${widgetId}`);
+      await axios.post(`${API_BASE_URL}/widget`, updatedWidget);
+    } else {
+      await axios.put(
+        `${API_BASE_URL}/widget/${oldPage}/${widgetId}`,
+        updatedWidget
+      );
+    }
+
+    return true;
+  } catch (error) {
+    console.error(`Error updating widget ${widgetId} on ${oldPage}:`, error);
+    return false;
+  }
+};
