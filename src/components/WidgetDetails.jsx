@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
+import ExpandableTextBox from "./ExpandableTextBox";
 
 const WidgetDetails = ({ widget, onDelete }) => {
   return (
@@ -16,7 +17,7 @@ const WidgetDetails = ({ widget, onDelete }) => {
         </Link>
       </div>
       <h3>{widget.header}</h3>
-      <p>{widget.text}</p>
+      <ExpandableTextBox text={widget.text} />
       <p>ID: {widget.id}</p>
       <p>Page: {widget.page_name}</p>
       <p>Price: {widget.price}</p>

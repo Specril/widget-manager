@@ -167,6 +167,37 @@ select:focus {
   justify-content: flex-end;
 }
 
+/* Scrollable Box (After Clicking) */
+.scrollable-box {
+  min-width: 300px;
+  max-width: 350px;
+  height: 150px; /* Fixed height */
+  overflow-y: auto; /* Enables scrolling */
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  word-wrap: break-word;
+  resize: none;
+  display: block;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 10px;
+  padding: 5px 12px;
+}
+
+.text-p:hover {
+  background-color: (var(--button-hover-color));
+  scale: 1.05;
+}
+
 /* ======== Responsive Design ======== */
 @media screen and (max-width: 600px) {
   form {
@@ -181,6 +212,10 @@ select:focus {
 
   .card {
     max-width: 90%;
+  }
+
+  .scrollable-box {
+    max-width: 300px;
   }
 }
 
