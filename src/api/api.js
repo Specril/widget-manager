@@ -98,3 +98,16 @@ export const updateWidget = async (
     return false;
   }
 };
+
+/* ========== AddWidget ========== */
+
+// Add a new widget
+export const addWidget = async (newWidget) => {
+  try {
+    await axios.post(`${API_BASE_URL}/widget`, newWidget);
+    return true;
+  } catch (error) {
+    console.error("Error adding widget:", error);
+    return false;
+  }
+};

@@ -146,6 +146,7 @@ function EditWidget() {
         <input
           required
           min="0"
+          max="100"
           type="number"
           value={showToPercentage}
           onChange={handlePercentageChange}
