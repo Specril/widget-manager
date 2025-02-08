@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { FaTrashAlt } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 
@@ -17,8 +15,8 @@ const WidgetDetails = ({ widget, onDelete }) => {
           </button>
         </Link>
       </div>
-      <h3>{widget.header}</h3>
-      <p>{widget.text}</p>
+      <h3 className="truncate-text">{widget.header}</h3>
+      <p className="truncate-text">{widget.text}</p>
       <p>ID: {widget.id}</p>
       <p>Page: {widget.page_name}</p>
       <p>Price: {widget.price}</p>

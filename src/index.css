@@ -204,3 +204,12 @@ select:focus {
   color: #666666;
   cursor: not-allowed;
 }
+
+/* ======== Text Styles ======== */
+.truncate-text {
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden; /* Hides overflow */
+  text-overflow: ellipsis; /* Adds "..." at the edge */
+  max-width: 90vw; /* Set your desired width */
+  display: block; /* Ensures it applies properly */
+}
