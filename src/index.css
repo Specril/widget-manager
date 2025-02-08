@@ -1,11 +1,9 @@
-/* ======== Shutterfly-Inspired Styling ======== */
-
 :root {
-  --primary-color: #333333; /* Main Orange */
+  --primary-color: #333333; /* Main Color */
   --secondary-color: #ffffff; /* White */
   --text-color: #333333; /* Dark Gray for better readability */
   --background-color: #f6f6f6; /* Light gray background */
-  --button-hover-color: #3333339c; /* Slightly darker orange */
+  --button-hover-color: #3333339c; /* Slightly transparent  */
   --border-radius: 10px; /* Smooth rounded corners */
   --shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadows */
 
@@ -115,7 +113,8 @@ label {
 
 input,
 textarea,
-select {
+select,
+option {
   width: 90%;
   padding: 10px;
   border-radius: var(--border-radius);
@@ -129,6 +128,10 @@ textarea:focus,
 select:focus {
   outline: 1px solid var(--primary-color);
   border-color: var(--primary-color);
+}
+
+select option {
+  width: 10px;
 }
 
 /* ======== Cards (for widgets or UI blocks) ======== */
@@ -169,7 +172,7 @@ select:focus {
 
 /* Scrollable Box (After Clicking) */
 .scrollable-box {
-  min-width: 300px;
+  min-width: 200px;
   max-width: 350px;
   height: 150px; /* Fixed height */
   overflow-y: auto; /* Enables scrolling */
@@ -187,10 +190,14 @@ select:focus {
 /* Close Button */
 .close-button {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -12px;
+  right: -10px;
   font-size: 10px;
-  padding: 5px 12px;
+  padding: 2px 4px;
+  margin: 0;
+  border-radius: 2px;
+  transition: none;
+  box-shadow: none;
 }
 
 .text-p:hover {
@@ -206,7 +213,8 @@ select:focus {
 
   input,
   select,
-  button {
+  button,
+  option {
     max-width: 90%;
   }
 

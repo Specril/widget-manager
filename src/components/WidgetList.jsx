@@ -112,7 +112,7 @@ function WidgetList() {
 
   return (
     <>
-      <h1>Widgets for {pageName}</h1>
+      <h1>Widget List</h1>
       <div className="page-selector">
         <select onChange={(e) => setPageName(e.target.value)} value={pageName}>
           <option value="All">All</option>
